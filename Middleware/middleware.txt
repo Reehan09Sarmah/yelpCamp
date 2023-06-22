@@ -1,0 +1,11 @@
+Middleware:  runs during the request/responsebcycle
+
+- are just functions
+- each has access to the request and response objects
+- parsing body of form data or JSON data - parse the 
+incoming request body and add it to the request object 
+so that we can use it
+- can end HTTP request by sending back a response with 
+methods like res.send()
+- OR it can be chained together, one after the another by 
+calling next()
