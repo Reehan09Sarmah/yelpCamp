@@ -6,10 +6,16 @@ const session = require('express-session')
 const flash = require('connect-flash')
 const ExpressError = require('./utils/ExpressError')
 const methodOverride = require('method-override')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
+const User = require('./models/user')
+
 
 //import the routers
-const campgrounds = require('./routes/campgrounds')
-const reviews = require('./routes/reviews')
+const campgroundRoutes = require('./routes/campgrounds')
+const reviewRoutes = require('./routes/reviews')
+const userRoutes = require('./routes/users')
+
 
 //connect to mongo dB
 mongoose.connect('mongodb://localhost:27017/yelpCamp', {
@@ -23,6 +29,8 @@ db.once("open", () => {
     console.log("Database Connected!")
 })
 
+
+
 const app = express()
 
 app.engine('ejs', ejsMate)
@@ -33,6 +41,8 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method')) // to disguise methods like put or patch with post as post is allowed in form method
 app.use(express.static(path.join(__dirname, 'public')))
+
+
 
 const sessionConfig = {
     secret: 'thisshouldbeabettersecret',
@@ -46,8 +56,22 @@ const sessionConfig = {
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
 }
+
+
 app.use(session(sessionConfig))
 app.use(flash())
+
+// using passport js for authenticating User, check user model too
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate())) // using passport-local strategy
+
+passport.serializeUser(User.serializeUser()) // how to store user in session
+passport.deserializeUser(User.deserializeUser) // how to remove from session
+
+
+
+
 //middleware to make flash message available to files in views
 app.use((req, res, next) => {
     //the flash message is accessible to local files under the key 'success'
@@ -57,10 +81,12 @@ app.use((req, res, next) => {
 })
 
 
-//import the router here and use it
-app.use('/campgrounds', campgrounds)
-app.use('/campgrounds/:id/reviews', reviews)
 
+
+//import the router here and use it
+app.use('/campgrounds', campgroundRoutes)
+app.use('/campgrounds/:id/reviews', reviewRoutes)
+app.use('/', userRoutes)
 
 
 
