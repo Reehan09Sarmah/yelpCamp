@@ -7,7 +7,7 @@ const flash = require('connect-flash')
 const ExpressError = require('./utils/ExpressError')
 const methodOverride = require('method-override')
 const passport = require('passport')
-const LocalStrategy = require('passport-local')
+const LocalStrategy = require('passport-local').Strategy
 const User = require('./models/user')
 
 
@@ -67,7 +67,7 @@ app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate())) // using passport-local strategy
 
 passport.serializeUser(User.serializeUser()) // how to store user in session
-passport.deserializeUser(User.deserializeUser) // how to remove from session
+passport.deserializeUser(User.deserializeUser()) // how to remove from session
 
 
 
@@ -84,9 +84,9 @@ app.use((req, res, next) => {
 
 
 //import the router here and use it
+app.use('/', userRoutes)
 app.use('/campgrounds', campgroundRoutes)
 app.use('/campgrounds/:id/reviews', reviewRoutes)
-app.use('/', userRoutes)
 
 
 
