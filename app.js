@@ -72,8 +72,10 @@ passport.deserializeUser(User.deserializeUser()) // how to remove from session
 
 
 
-//middleware to make flash message available to files in views
+//middleware to make any info available to all templates in views
 app.use((req, res, next) => {
+    // this stores info of logged in user
+    res.locals.currentUser = req.user
     //the flash message is accessible to local files under the key 'success'
     res.locals.success = req.flash('success')
     res.locals.error = req.flash('error')

@@ -22,9 +22,10 @@ const seedDB = async () => {
         const price = Math.floor(Math.random() * 20) + 10
         const camp = new Campground(
             {
+                author: '649c3b87e30df4513a5f1d45',
                 location: `${cities[random1000].city}, ${cities[random1000].state}`,
                 title: `${sample(descriptors)} ${sample(places)}`,
-                image: `https://source.unsplash.com/collection/483251`,
+                image: `https://source.unsplash.com/collection/483252`,
                 description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book',
                 price
             }

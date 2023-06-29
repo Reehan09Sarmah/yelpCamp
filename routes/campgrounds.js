@@ -41,8 +41,8 @@ router.get('/new', isLoggedIn, (req, res) => {
 
 //to add the new campground to DB
 router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res) => {
-    // if (!req.body.campground) throw new ExpressError('Inavlid Campground Data', 400) //throwing an error will also invoke error handler
     const campground = new Campground(req.body.campground)
+    campground.author = req.user._id // to save the user id of the logged in user while creating campground
     await campground.save()
     req.flash('success', 'Successfully made a new campground')
     res.redirect(`/campgrounds/${campground._id}`)
@@ -51,7 +51,7 @@ router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res) => 
 //to get the details of the campground
 router.get('/:id', catchAsync(async (req, res) => {
     const { id } = req.params
-    const campground = await Campground.findById(id).populate('reviews')
+    const campground = await Campground.findById(id).populate('reviews').populate('author')
     if (!campground) {
         //if cannot find the mentioned campground, redirect to campgrounds page and display 'error' flash message
         req.flash('error', 'No Such Campground Present!')

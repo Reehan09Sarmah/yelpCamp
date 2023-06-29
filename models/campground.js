@@ -9,6 +9,10 @@ const CampGroundSchema = new Schema({
     image: String,
     description: String,
     location: String,
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     reviews: [
         {
             type: Schema.Types.ObjectId,
@@ -16,6 +20,7 @@ const CampGroundSchema = new Schema({
         }
     ]
 })
+
 //to handle --- delete the reviews associated with it also when a camp is deleted. Otherwise it will stay in reviews db
 CampGroundSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
