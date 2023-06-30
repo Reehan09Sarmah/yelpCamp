@@ -11,8 +11,10 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createCampground = async (req, res) => {
     const campground = new Campground(req.body.campground)
+    campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }))
     campground.author = req.user._id // to save the user id of the logged in user while creating campground
     await campground.save()
+    console.log(campground);
     req.flash('success', 'Successfully made a new campground')
     res.redirect(`/campgrounds/${campground._id}`)
 }
@@ -48,6 +50,9 @@ module.exports.editCampground = async (req, res) => {
     const { id } = req.params
     // using spread operator to copy whats in req.body and pass the object to update
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { new: true })
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }))
+    campground.images.push(...imgs)
+    await campground.save()
     req.flash('success', 'Successfully Updated!')
     res.redirect(`/campgrounds/${campground._id}`)
 }
