@@ -12,29 +12,27 @@
                     <div class="valid-feedback">Looks Good!</div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label" for="location">Location</label>
-                    <input class="form-control" type="text" id="location" name="campground[location]"
-                        value="<%= campground.location %>" required>
-                    <div class="valid-feedback">Looks Good!</div>
-
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="images">Add Images</label>
-                    <input type="file" name="images" id="images" multiple>
-                </div>
-
-
-                <div class="mb-3">
-                    <label class="form-label" for="price">Campground Price</label>
-                    <div class="input-group ">
-
-                        <span class="input-group-text" id="price-label">$</span>
-                        <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price"
-                            aria-describedby="price-label" name="campground[price]" value="<%= campground.price %>"
-                            required>
-
+                <div class="mb-3 d-flex">
+                    <div class="me-2">
+                        <label class="form-label" for="location">Location</label>
+                        <input class="form-control" type="text" id="location" name="campground[location]"
+                            value="<%= campground.location %>" required>
+                        <div class="valid-feedback">Looks Good!</div>
                     </div>
+
+                    <div class="ms-2">
+                        <label class="form-label" for="price">Campground Price</label>
+                        <div class="input-group ">
+
+                            <span class="input-group-text" id="price-label">$</span>
+                            <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price"
+                                aria-describedby="price-label" name="campground[price]" value="<%= campground.price %>"
+                                required>
+
+                        </div>
+                    </div>
+
+
                 </div>
 
                 <div class="mb-3">
@@ -44,12 +42,27 @@
                     <div class="valid-feedback">Good to go</div>
 
                 </div>
+                <div class="mb-3">
+                    <label for="multipleImages" class="form-label">Add Images</label>
+                    <input class="form-control" type="file" name="images" id="multipleImages" multiple>
+                </div>
+
+                <div class="mb-3">
+                    <%campground.images.forEach(function(img, i){%>
+                        <img src="<%= img.url %>" class="img-thumbnail" alt="">
+                        <div class="form-check-inline">
+                            <input type="checkbox" id="image-<%=i%>">
+                        </div>
+                        <label for="image-<%=i%>">Delete?</label>
+                        <% }) %>
+                </div>
 
                 <div class="mb-3">
                     <button class="btn btn-success">Update Campground</button>
+                    <a href="/campgrounds" class="btn btn-warning">All Campgrounds</a>
                 </div>
             </form>
-            <a href="/campgrounds">All Campgrounds</a>
+
         </div>
     </div>
 
