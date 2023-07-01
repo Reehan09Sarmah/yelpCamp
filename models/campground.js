@@ -3,15 +3,21 @@ const { campgroundSchema } = require('../schemaValid')
 const Schema = mongoose.Schema
 const Review = require('./review')
 
+
+// so that we can manipulate the urls stored in the images array and add a virtual property to it
+const ImageSchema = new Schema({
+    url: String,
+    filename: String
+})
+// A virtual property that stores images with size = 100 pixels. So that we can access and view them in edit form
+ImageSchema.virtual('thumbnail').get(function () {
+    return this.url.replace('/upload', '/upload/w_100')
+})
+
 const CampGroundSchema = new Schema({
     title: String,
     price: Number,
-    images: [
-        {
-            url: String,
-            filename: String
-        }
-    ],
+    images: [ImageSchema],
     description: String,
     location: String,
     author: {
